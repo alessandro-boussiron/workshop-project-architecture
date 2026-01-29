@@ -5,9 +5,27 @@ Un workshop pratique sur les architectures de projet modernes, avec focus sur le
 ## 📋 Contenu
 
 ### 🌐 Partie 1: Architecture Web Moderne
-- **Clean Architecture** - Séparation des préoccupations et indépendance des frameworks
-- **Domain-Driven Design (DDD)** - Modélisation centrée sur le métier
-- **CQRS** - Séparation commandes/requêtes
+
+#### 📚 Guides Complets
+- **[Clean Architecture](web/WEB_CLEAN_ARCHITECTURE.md)** - Guide détaillé avec diagrammes, patterns, comparaisons
+  - Principes SOLID et Dependency Rule
+  - Architecture en couches vs Hexagonale
+  - Ports & Adapters
+  - [Exercices pratiques](web/WEB_CLEAN_ARCHITECTURE_EXERCISES.md) (6 exercices progressifs)
+  
+- **[Domain-Driven Design](web/WEB_DDD.md)** - Modélisation centrée sur le métier
+  - Ubiquitous Language, Bounded Contexts
+  - Entities, Value Objects, Aggregates
+  - Domain Events et Services
+  - Strategic vs Tactical DDD
+  
+- **[CQRS & Event Sourcing](web/WEB_CQRS.md)** - Patterns avancés
+  - Command Query Responsibility Segregation
+  - Event Store et Replay
+  - Read Models et Projections
+  - Quand utiliser (et ne pas utiliser)
+
+#### 💻 Exemples de Code
 - **Repository Pattern** - Abstraction de la persistance
 - **Dependency Injection** - Inversion de contrôle
 
@@ -26,13 +44,23 @@ Un workshop pratique sur les architectures de projet modernes, avec focus sur le
 ## 🚀 Structure du Workshop
 
 ```
-web/                    # Exemples architecture web
-├── clean-architecture/ # Clean Architecture complète
-├── ddd-example/        # Domain-Driven Design
-├── cqrs-pattern/       # Command Query Responsibility Segregation
-└── repository-pattern/ # Abstraction data access
+web/                                    # Architecture web
+├── WEB_CLEAN_ARCHITECTURE.md          # 📖 Guide complet Clean Architecture
+├── WEB_CLEAN_ARCHITECTURE_EXERCISES.md # 🎯 6 exercices progressifs
+├── WEB_DDD.md                          # 📖 Guide complet DDD
+├── WEB_CQRS.md                         # 📖 Guide CQRS + Event Sourcing
+├── clean-architecture/                 # Exemples code Clean Arch
+│   ├── example.ts                      # Exemple complet commenté
+│   └── README.md
+├── ddd-example/                        # Exemples DDD
+│   ├── order-domain.ts                 # Aggregate Order avec Value Objects
+│   └── README.md
+├── cqrs-pattern/                       # Exemple CQRS + Event Sourcing
+│   ├── bank-account.ts                 # BankAccount avec events
+│   └── README.md
+└── repository-pattern/                 # Pattern Repository
 
-c/                      # Exemples architecture C
+c/                                      # Architecture C & Embedded
 ├── nasa-rules/         # 10 règles NASA appliquées
 │   ├── docs/           # RULE01.md à RULE10.md (explications détaillées)
 │   └── exercises/      # ex01 à ex10 (exercices pratiques)
@@ -52,20 +80,61 @@ c/                      # Exemples architecture C
 
 ## 💻 Prérequis
 
-**Web:**
-- Node.js 18+
-- TypeScript
-- Connaissance basique des design patterns
-
-**C:**
-- GCC ou Clang
-- Make
-- Notions de programmation système
-
 ## 📖 Comment utiliser ce workshop
 
 ### 📚 Ordre de Lecture Recommandé
 
+**Pour la partie Web (Architecture Moderne):**
+
+#### Débutant → Intermédiaire
+1. **Commencer par:** `web/WEB_CLEAN_ARCHITECTURE.md`
+   - Comprendre la séparation des couches
+   - Domain vs Application vs Infrastructure
+   - Dependency Inversion Principle
+   
+2. **Pratiquer:** `web/WEB_CLEAN_ARCHITECTURE_EXERCISES.md`
+   - Exercice 1: Task Manager (débutant)
+   - Exercice 2: Blog System (intermédiaire)
+   - Exercice 3: E-commerce Cart (intermédiaire)
+
+3. **Approfondir:** `web/WEB_DDD.md`
+   - Entities vs Value Objects
+   - Aggregates et Bounded Contexts
+   - Ubiquitous Language
+   - Domain Events
+
+4. **Avancé:** `web/WEB_CQRS.md`
+   - Séparation Command/Query
+   - Event Sourcing
+   - Projections et Read Models
+
+#### Points Clés Web
+- ✨ **Domain au centre** - La logique métier ne dépend de rien
+- 🎯 **Testabilité** - Use cases testables avec mocks
+- 🔄 **Flexibility** - Changement de DB/framework facile
+- 📊 **Scalabilité** - Architecture qui supporte la croissance
+
+---
+
+**Pour la partie C (Memory Safety):**
+**C:**
+- GCC ou Clang
+- Make
+### 📦 Chaque Section Contient
+
+**Guides Web:**
+- 📖 **Explications détaillées** - Concepts avec diagrammes
+- 💻 **Exemples complets** - Code commenté et fonctionnel
+- 🎯 **Exercices progressifs** - Du débutant à l'avancé
+- ⚠️ **Anti-patterns** - Erreurs courantes à éviter
+- ✅ **Best practices** - Patterns recommandés
+- 📊 **Comparaisons** - Quand utiliser quoi
+
+**Exemples C:**
+- 📝 **Théorie minimale** - Contexte essentiel
+- 💻 **Code complet** - Exemples fonctionnels
+- ⚠️ **Anti-patterns** - Ce qu'il faut éviter
+- ✅ **Best practices** - Solutions recommandées
 **Pour la partie C (Memory Safety):**
 
 1. **Commencer par:** `c/memory-safety/MEMORY_RULES.md`
