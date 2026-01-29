@@ -1,0 +1,14 @@
+{
+  "name": "ddd-example",
+  "version": "1.0.0",
+  "description": "Domain-Driven Design example with Order aggregate",
+  "main": "order-domain.ts",
+  "scripts": {
+    "start": "ts-node order-domain.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "cqrs-pattern",
+  "version": "1.0.0",
+  "description": "CQRS with Event Sourcing example",
+  "main": "bank-account.ts",
+  "scripts": {
+    "start": "ts-node bank-account.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0"
+  }
+}

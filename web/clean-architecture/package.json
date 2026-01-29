@@ -1,0 +1,15 @@
+{
+  "name": "clean-architecture-example",
+  "version": "1.0.0",
+  "description": "Clean Architecture example with TypeScript",
+  "main": "example.ts",
+  "scripts": {
+    "start": "ts-node example.ts",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0"
+  }
+}
