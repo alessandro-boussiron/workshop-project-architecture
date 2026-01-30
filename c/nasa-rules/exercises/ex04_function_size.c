@@ -118,47 +118,61 @@ int bad_process_packets(Packet *packets, size_t count) {
  * Max 10 lines
  */
 uint32_t calculate_checksum(const uint8_t *data, size_t size) {
-    // TODO: Implement checksum calculation
-    (void)data;
-    (void)size;
-    return 0;
+    uint32_t checksum = 0;
+    for (size_t j = 0; j < size; j++) {
+        checksum += data[j];
+    }
+    checksum ^= 0xFFFFFFFF;
+    return checksum;
 }
 
 /* TODO: Function 2 - Validate single packet
  * Max 15 lines
  */
 bool validate_packet(Packet *packet) {
-    // TODO: Check size and verify checksum
-    (void)packet;
-    return false;
+    if (!packet)
+        return false;
+    if (packet->size > (size_t)MAX_PACKET_SIZE) {
+        packet->valid = false;
+        return false;
+    }
+    packet->valid = true;
+    return true;
 }
 
 /* TODO: Function 3 - Validate all packets
  * Max 10 lines
  */
 int validate_all_packets(Packet *packets, size_t count) {
-    // TODO: Iterate and validate each
-    (void)packets;
-    (void)count;
-    return 0;
+    int counter = 0;
+    for (int i = 0; i < count && i < MAX_PACKETS; i++)
+        if (validate_packet(&packets[i]))
+            counter += 1;
+    return counter;
 }
 
 /* TODO: Function 4 - Swap two packets
  * Max 5 lines
  */
 void swap_packets(Packet *a, Packet *b) {
-    // TODO: Implement swap
-    (void)a;
-    (void)b;
+    Packet *c = a;
+    a = b;
+    b = c;
 }
 
 /* TODO: Function 5 - Sort packets by ID
  * Max 15 lines
  */
 void sort_packets_by_id(Packet *packets, size_t count) {
-    // TODO: Bubble sort using swap_packets
-    (void)packets;
-    (void)count;
+    for (size_t i = 0; i < count - 1; i++) {
+        for (size_t j = 0; j < count - i - 1; j++) {
+            if (packets[j].id > packets[j + 1].id) {
+                Packet temp = packets[j];
+                packets[j] = packets[j + 1];
+                packets[j + 1] = temp;
+            }
+        }
+    }
 }
 
 /* TODO: Function 6 - Mark duplicates invalid
@@ -166,10 +180,14 @@ void sort_packets_by_id(Packet *packets, size_t count) {
  * Returns: number of duplicates found
  */
 int mark_duplicate_packets(Packet *packets, size_t count) {
-    // TODO: Find and mark duplicates
-    (void)packets;
-    (void)count;
-    return 0;
+    int duplicates = 0;
+    for (size_t i = 0; i < count - 1; i++) {
+        if (packets[i].id == packets[i + 1].id) {
+            duplicates++;
+            packets[i + 1].valid = false;
+        }
+    }
+    return duplicates;
 }
 
 /* TODO: Function 7 - Calculate packet statistics
@@ -184,9 +202,19 @@ typedef struct {
 
 PacketStats calculate_packet_stats(const Packet *packets, size_t count) {
     PacketStats stats = {0};
-    // TODO: Calculate all statistics
-    (void)packets;
-    (void)count;
+    for (size_t i = 0; i < count; i++) {
+        if (!(packets[i].valid))
+            continue;
+        stats.valid_count++;
+        stats.total_bytes += packets[i].size;
+        
+        if (packets[i].id < stats.min_id) {
+            stats.min_id = packets[i].id;
+        }
+        if (packets[i].id > stats.max_id) {
+            stats.max_id = packets[i].id;
+        }
+    }
     return stats;
 }
 
@@ -195,10 +223,13 @@ PacketStats calculate_packet_stats(const Packet *packets, size_t count) {
  */
 void print_packet_report(size_t total, int duplicates, 
                          const PacketStats *stats) {
-    // TODO: Print formatted report
-    (void)total;
-    (void)duplicates;
-    (void)stats;
+    printf("=== Packet Processing Report ===\n");
+    printf("Total packets: %zu\n", total);
+    printf("Valid packets: %d\n", stats->valid_count);
+    printf("Invalid packets: %zu\n", total - stats->valid_count);
+    printf("Duplicates found: %d\n", duplicates);
+    printf("Total bytes: %zu\n", stats->total_bytes);
+    printf("ID range: %u - %u\n", stats->min_id, stats->max_id);
 }
 
 /* TODO: Function 9 - Main orchestrator
@@ -206,14 +237,13 @@ void print_packet_report(size_t total, int duplicates,
  * Should call all above functions
  */
 int good_process_packets(Packet *packets, size_t count) {
-    // TODO: Orchestrate packet processing
-    // 1. Validate all
-    // 2. Sort
-    // 3. Mark duplicates
-    // 4. Calculate stats
-    // 5. Print report
-    (void)packets;
-    (void)count;
+    int duplicates = 0;
+
+    validate_all_packets(packets, count);
+    sort_packets_by_id(packets, count);
+    mark_duplicate_packets(packets, count);
+    PacketStats stats = calculate_packet_stats(packets, count);
+    print_packet_report(count, duplicates, &stats);
     return 0;
 }
 

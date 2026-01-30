@@ -16,9 +16,9 @@
 #include <assert.h>
 
 // TODO: Add your MAX_ defines here
-// #define MAX_SENSORS ???
-// #define MAX_NAME_LENGTH ???
-// #define MAX_DATA_POINTS ???
+#define MAX_SENSORS 10
+#define MAX_NAME_LENGTH 256
+#define MAX_DATA_POINTS 256
 
 // ============================================
 // ❌ BAD CODE TO FIX
@@ -90,8 +90,8 @@ void bad_add_data_point(DynamicSensor *sensor, int value) {
  */
 typedef struct {
     // TODO: Define static sensor structure
-    char name[64];  // Example - adjust size
-    int data[100];  // Example - adjust size
+    char name[MAX_NAME_LENGTH];  // Example - adjust size
+    int data[MAX_DATA_POINTS];  // Example - adjust size
     size_t data_count;
     bool active;
 } StaticSensor;
@@ -118,7 +118,15 @@ static SensorPool g_sensor_pool = {0};
  * - No malloc
  */
 void pool_init(void) {
-    // TODO: Implement pool initialization
+    g_sensor_pool.allocated_count = 0;
+    for (size_t i = 0; i < MAX_SENSORS; i++) {
+        g_sensor_pool.sensors[i].name[0] = '\0';
+        g_sensor_pool.sensors[i].data_count = 0;
+        g_sensor_pool.sensors[i].active = false;
+        for (int j = 0; j < MAX_DATA_POINTS; j++)
+            g_sensor_pool.sensors[i].data[j] = 0;
+    }
+    g_sensor_pool.allocated_count = MAX_SENSORS;
 }
 
 /* TODO: Acquire sensor from pool
@@ -130,9 +138,14 @@ void pool_init(void) {
  * - Return pointer or NULL if full
  */
 StaticSensor* good_create_sensor(const char *name) {
-    // TODO: Implement sensor acquisition
-    (void)name;
-    return NULL;  // Placeholder
+    for (int i = 0; i < g_sensor_pool.allocated_count; i++)
+        if (!(g_sensor_pool.sensors[i].active)) {
+            for (int j = 0; j <= strlen(name); j++)
+                g_sensor_pool.sensors[i].name[j] = name[j];
+            g_sensor_pool.sensors[i].active = 1;
+            return &(g_sensor_pool.sensors[i]);
+        }
+    return NULL;
 }
 
 /* TODO: Release sensor to pool
@@ -143,8 +156,14 @@ StaticSensor* good_create_sensor(const char *name) {
  * - Decrement counter
  */
 void good_destroy_sensor(StaticSensor *sensor) {
-    // TODO: Implement sensor release
-    (void)sensor;
+    for (int i = 0; g_sensor_pool.sensors[i].active && i < MAX_SENSORS; i++) {
+        g_sensor_pool.sensors[i].active = 0;
+        for (int j = 0; j < MAX_DATA_POINTS; j++)
+            g_sensor_pool.sensors[i].data[j] = 0;
+        for (int j = 0; j < MAX_NAME_LENGTH; j++)
+            g_sensor_pool.sensors[i].name[j] = 0;
+        g_sensor_pool.sensors[i].data_count = 0;
+    }
 }
 
 /* TODO: Add data point
@@ -155,10 +174,14 @@ void good_destroy_sensor(StaticSensor *sensor) {
  * - Return success/failure
  */
 bool good_add_data_point(StaticSensor *sensor, int value) {
-    // TODO: Implement data addition
-    (void)sensor;
-    (void)value;
-    return false;  // Placeholder
+    int i = 0;
+
+    if (!(sensor->active))
+            return false;
+    for (; i < sensor->data_count; i++);
+    sensor->data[i] = value;
+    sensor->data_count += 1;
+    return true;
 }
 
 /* TODO: Get sensor statistics
@@ -169,11 +192,11 @@ bool good_add_data_point(StaticSensor *sensor, int value) {
  */
 void good_get_stats(const StaticSensor *sensor, 
                     double *avg, int *min, int *max) {
-    // TODO: Implement statistics
-    (void)sensor;
-    (void)avg;
-    (void)min;
-    (void)max;
+    for (int i = 0; i  < sensor->data_count && i < MAX_DATA_POINTS; i++)
+        *avg += sensor->data[i];
+    *avg /= sensor->data_count;
+    *min = sensor->data[0];
+    *max = sensor->data[sensor->data_count - 1];
 }
 
 // ============================================

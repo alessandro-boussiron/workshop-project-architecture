@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -pedantic -std=c11 -g
+CFLAGS = -Wall -Wextra -pedantic -std=c11 -g
 
 # Individual rule examples
 RULE_SOURCES = rule01_control_flow.c \

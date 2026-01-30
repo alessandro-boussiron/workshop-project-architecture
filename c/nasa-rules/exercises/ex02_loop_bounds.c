@@ -15,9 +15,9 @@
 #include <stdint.h>
 
 // TODO: Add your MAX_ defines here
-// #define MAX_INPUT_SIZE ???
-// #define MAX_ARRAY_SIZE ???
-// #define MAX_WAIT_CYCLES ???
+#define MAX_INPUT_SIZE (int)(256)
+#define MAX_ARRAY_SIZE (int)(8192)
+#define MAX_WAIT_CYCLES (int)(32768)
 
 // ============================================
 // ❌ BAD CODE TO FIX
@@ -83,9 +83,14 @@ void bad_nested_loops(int n) {
  * - Return actual length
  */
 size_t good_parse_input(char *input) {
-    // TODO: Implement with fixed bound
-    (void)input;
-    return 0;  // Placeholder
+    int i = 0;
+    while (*input && i < MAX_INPUT_SIZE) {
+        printf("%c", *input);
+        i++;
+        input++;
+    }
+    printf("\n");
+    return i + 1;
 }
 
 /* TODO: Fix problem 2
@@ -96,11 +101,13 @@ size_t good_parse_input(char *input) {
  * - Pass size as parameter
  */
 int good_find_value(int *array, size_t size, int value) {
-    // TODO: Implement with fixed bound
-    (void)array;
-    (void)size;
-    (void)value;
-    return -1;  // Placeholder
+    int i = 0;
+    while (array[i] && i < MAX_ARRAY_SIZE) {
+        if (array[i] == value)
+            return i;
+        i++;
+    }
+    return 0;
 }
 
 /* TODO: Fix problem 3
@@ -110,9 +117,10 @@ int good_find_value(int *array, size_t size, int value) {
  * - Return success/failure
  */
 bool good_wait_for_ready(volatile bool *ready) {
-    // TODO: Implement with timeout
-    (void)ready;
-    return false;  // Placeholder
+    unsigned int i = 0;
+    while (i < (unsigned int)MAX_WAIT_CYCLES && !*ready)
+        i++;
+    return ready;
 }
 
 /* TODO: Fix problem 4
@@ -123,10 +131,14 @@ bool good_wait_for_ready(volatile bool *ready) {
  * - Return bytes processed
  */
 int good_process_stream(uint8_t *stream, size_t max_size) {
-    // TODO: Implement with fixed bound
-    (void)stream;
-    (void)max_size;
-    return 0;  // Placeholder
+    int count = 0;
+    while (count < MAX_ARRAY_SIZE) {  // What if no sentinel?
+        if (stream[count] == 0xFF)
+            break;
+        printf("Byte: 0x%02X\n", stream[count]);
+        count++;
+    }
+    return count;
 }
 
 /* TODO: Fix problem 5
@@ -136,8 +148,14 @@ int good_process_stream(uint8_t *stream, size_t max_size) {
  * - Clamp n to maximum
  */
 void good_nested_loops(int n) {
-    // TODO: Implement with fixed bounds
-    (void)n;
+    for (int i = 0; i < n; i++) {  // n unbounded
+        int j = 0;
+        while (j < i * 2) {  // Bound changes with i
+            printf("%d,%d ", i, j);
+            j++;
+        }
+        printf("\n");
+    }
 }
 
 // ============================================

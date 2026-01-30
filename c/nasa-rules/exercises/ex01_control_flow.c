@@ -91,10 +91,20 @@ int bad_recursive_factorial(int n) {
  * - Return error code if command unknown
  */
 int good_process_commands(char **commands, int count) {
-    // TODO: Implement without goto
-    (void)commands;
-    (void)count;
-    return -1;  // Placeholder
+    for (unsigned int i = 0; i < count; i++){
+        if (!strcmp(commands[i], "START"))
+            printf("Starting...\n");
+        
+        if (!strcmp(commands[i], "STOP") == 0) {
+            printf("Stopping...\n");
+            return 1;
+        }
+        
+        if (!strcmp(commands[i], "PAUSE") == 0)
+            printf("Pausing...\n");
+        printf("Unknown command: %s\n", commands[i]);
+    }
+    return 0;
 }
 
 /* TODO: Fix problem 2
@@ -104,9 +114,17 @@ int good_process_commands(char **commands, int count) {
  * - Ensure file is always closed
  */
 int good_initialize_system(const char *config_file) {
-    // TODO: Implement without goto
-    (void)config_file;
-    return -1;  // Placeholder
+    FILE *file = fopen(config_file, "r");
+    if (file == NULL)
+        return -1;;
+    
+    char buffer[256];
+    if (fgets(buffer, sizeof(buffer), file) == NULL) {
+        fclose(file);
+        return -1;
+    }
+    fclose(file);
+    return 0;
 }
 
 /* TODO: Fix problem 3
@@ -116,9 +134,10 @@ int good_initialize_system(const char *config_file) {
  * - Bounded loop
  */
 int good_iterative_factorial(int n) {
-    // TODO: Implement iteratively
-    (void)n;
-    return -1;  // Placeholder
+    int value = 1;
+    for (int i = 1; i <= n; i++)
+        value *= i;
+    return value;
 }
 
 // ============================================
