@@ -9,6 +9,8 @@
  * Compile: gcc -Wall -Wextra -Werror -std=c11 ex06_limit_scope.c -o ex06
  */
 
+
+//Test
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
